@@ -7,29 +7,31 @@
 from typing import List
 
 
+class Solution:
+    def findkthlargest(nums: List[int], k: int) -> int:
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: int
+        """
 
-def findkthlargest(nums: List[int], k: int) -> int:
+        k = len(nums) - k
 
-    k = len(nums) - k
+        def quick_select(l: int, r: int):
+            pivot, p = nums[r], l
+            for i in range(l, r):
+                if nums[i] <= pivot:
+                    nums[p], nums[i] = nums[i], nums[p]
+                    p += 1
 
-    def quick_select(l: int, r: int):
-        pivot, p = nums[r], l
-        for i in range(l, r):
-            if nums[i] <= pivot:
-                nums[p], nums[i] = nums[i], nums[p]
-                p += 1
+            nums[p], nums[r] = nums[r], nums[p]
+            if p > k:
+                return quick_select(l, p-1)
+            if p < k:
+                return quick_select(p+1, r)
+            else:
+                return nums[p]
 
-        nums[p], nums[r] = nums[r], nums[p]
-        if p > k:
-            return quick_select(l, p-1)
-        if p < k:
-            return quick_select(p+1, r)
-        else:
-            return nums[p]
-
-    return quick_select(0, len(nums)-1)
+        return quick_select(0, len(nums)-1)
 
 
-
-nums = [1, 6, 7, 4, 5, 2]
-print(findkthlargest(nums, k=2))
