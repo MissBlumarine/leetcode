@@ -1,0 +1,42 @@
+class Solution(object):
+    def findOrder(self, numCourses, prerequisites):
+        """
+        :type numCourses: int
+        :type prerequisites: List[List[int]]
+        :rtype: List[int]
+        """
+
+        results = []
+        list_1 = []
+        degrees = []
+
+        for i in range(numCourses):
+            list_1.append([])
+            degrees.append(0)
+
+        for prerequisite in prerequisites:
+            list_1[prerequisite[1]].append(prerequisite[0])
+            degrees[prerequisite[0]] += 1
+
+        queue = []
+
+        for i, degree in enumerate(degrees):
+            if degree == 0:
+                queue.append(i)
+
+        while queue:
+            course = queue.pop(0)
+            results.append(course)
+
+            for i in list_1[course]:
+                degrees[i] -= 1
+
+                if degrees[i] == 0:
+                    queue.append(i)
+        
+        if len(results) < numCourses:
+            return []
+        
+        return results
+
+
